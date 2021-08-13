@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-
+import re
 import os
 from PIL import Image
 
-def convert_tiff_jpeg(dpath,opath):
+def convert_tiff_jpeg(dpath,opath,pattern):
   """convert tiff image to jpge""""
   files = os.listdir(opath)
   for img in files:
-   if "ic_" in img:
+   if re.search(pattern,img):
       with Image.open(os.path.join(opath,img)) as im:
         if im.format in "TIFF":
           conv=im.resize((128,128))
@@ -19,7 +19,8 @@ def convert_tiff_jpeg(dpath,opath):
  def main():
   dpath ="/opt/icons/"
   opath="../images"
-  convert_tiff_jpeg(dpath,opath):
+  pattern =r'ic_'
+  convert_tiff_jpeg(dpath,opath,pattern):
       
   
 main()

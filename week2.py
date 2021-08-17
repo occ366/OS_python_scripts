@@ -23,8 +23,11 @@ def api_call(url,json):
   """ Call the api of one server by url and upload the info of one json """
   try:
     set=requests.post(url,data=json)
-    set.raise_for_status()
-    print(set.text)
+    if set.status_code is "201":
+      print(set.text)
+    else:
+      set.raise_for_status()
+    
   except:
     print("Unexpected error "+ str(set))
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-import sys
+
 import os
 import json
 import requests
-import re
+
 
 json_model={"title":0, "name":1, "date":2, "feedback":3}
 headers = {'Content-type': 'application/json'}

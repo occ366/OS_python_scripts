@@ -3,13 +3,11 @@
 import os
 import json
 import requests
-
-
-json_model={"title":0, "name":1, "date":2, "feedback":3}
-headers = {'Content-type': 'application/json'}
+import sys
 
 def load_json_from_file(path,file):
   """ Read lines of one file and crate a json """
+  json_model={"title":0, "name":1, "date":2, "feedback":3}
   Json ={}
   with open(os.path.join(path,file)) as f:
     Json_txt=f.readlines()
@@ -20,6 +18,7 @@ def load_json_from_file(path,file):
 
 def api_call(url,Json):
   """ Call the api of one server by url and upload the info of one json """
+  headers = {'Content-type': 'application/json'}
   try:
     payload={'json_payload': Json}
     set=requests.post(url,data=Json,headers=headers)
@@ -33,8 +32,9 @@ def api_call(url,Json):
 
 def main():
   """ main functio: call other fuction for each file we need"""
+  ipadd=sys.agrv[1]
   path ="/data/feedback/"
-  url="http://35.238.192.243/feedback/?format=api"
+  url="http://{}/feedback/?format=api"´.format(ipadd)
   for file in os.listdir(path):
     json=load_json_from_file(path,file)
     api_call(url,json)

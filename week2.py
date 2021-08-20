@@ -9,19 +9,19 @@ json_model={"title":0, "name":1, "date":2, "feedback":3}
 
 def load_json_from_file(path,file):
   """ Read lines of one file and crate a json """
-  json ={}
+  Json ={}
   with open(os.path.join(path,file)) as f:
-    json_txt=f.readlines()
+    Json_txt=f.readlines()
     for field,position in json_model.items():
-      json[field.strip()]='\''+json_txt[position].strip('\n')+'\''
+      Json[field.strip()]=Json_txt[position].strip('\n')
   f.close()
-  return json
+  return json.dumps(Json)
 
 def api_call(url,Json):
   """ Call the api of one server by url and upload the info of one json """
   print("try to uploader in {}, json: {} ".format(url,Json))
   try:
-    set=requests.post(url,data=json.dumps(Json))
+    set=requests.post(url,data=Json)
     if set.status_code is "201":
       print(set.text)
     else:

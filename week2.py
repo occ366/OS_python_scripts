@@ -6,6 +6,7 @@ import requests
 import re
 
 json_model={"title":0, "name":1, "date":2, "feedback":3}
+headers = {'Content-type': 'application/json'}
 
 def load_json_from_file(path,file):
   """ Read lines of one file and crate a json """
@@ -19,14 +20,13 @@ def load_json_from_file(path,file):
 
 def api_call(url,Json):
   """ Call the api of one server by url and upload the info of one json """
-  print("try to uploader in {}, json: {} ".format(url,Json))
   try:
-    set=requests.post(url,data=Json)
+    payload={'json_payload': Json}
+    set=requests.post(url,data=Json,headers=headers)
     if set.status_code is "201":
-      print(set.text)
+      print(set.status_code)
     else:
       set.raise_for_status()
-
   except:
     print("Unexpected error"+str(set))
 
@@ -34,10 +34,9 @@ def api_call(url,Json):
 def main():
   """ main functio: call other fuction for each file we need"""
   path ="/data/feedback/"
-  url="http://"+str(sys.argv[1])+"/feedback"
+  url="http://35.238.192.243/feedback/?format=api"
   for file in os.listdir(path):
     json=load_json_from_file(path,file)
     api_call(url,json)
 
 main()
-

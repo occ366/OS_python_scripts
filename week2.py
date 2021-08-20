@@ -3,9 +3,7 @@ import sys
 import os
 import json
 import requests
-from requests import ConnectionError
-from requests import HTTPError
-from requests import Timeout
+import re
 
 json_model={"title":0, "name":1, "date":2, "feedback":3}
 
@@ -15,9 +13,8 @@ def load_json_from_file(path,file):
   with open(os.path.join(path,file)) as f:
     json_txt=f.readlines()
     for field,position in json_model.items():
-      json[field.strip()]=json_txt[position].strip()
+      json[field.strip()]='\''+json_txt[position].strip('\n')+'\''
   f.close()
-  print(json)
   return json
 
 def api_call(url,Json):
@@ -43,3 +40,4 @@ def main():
     api_call(url,json)
 
 main()
+

@@ -50,14 +50,14 @@ def process_data(data):
     
 
    all_values = car_popularity.values()
-   max_value = max(all_values)
-   max_key = max(car_popularity, key=best_car.get)
+   max_sales = max(all_values)
+   max_year = max(car_popularity, key=best_car.get)
 
   summary = [
         "The {} generated the most revenue: ${}".format(
             format_car(max_revenue["car"]), max_revenue["revenue"]),
         "The {} had the most sales: {}".format(format_car(sales["car"]), sales["total_sales"]),
-        "The most popular year was {} with {} sales.".format(max_key, max_value),
+        "The most popular year was {} with {} sales.".format(max_year, max_sales),
     ]
 
   return summary

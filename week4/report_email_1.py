@@ -22,8 +22,9 @@ if __name__ == "__main__":
   title = 'Process update on'+ str(datetime.date.today().strftime("%B %d, %Y"))
   reports.generate_report(attachment, title, '<br/>'.join(paragraph(path)))
   message=emails.generate_email("automation@example.com",
-                        "{}@example.com".format(USER),
-                        "Upload Completed - Online Fruit Store","All fruits are uploaded to our website successfully. A detailed list is attached to this email.",
-                       attachment)
+                                "{}@example.com".format(USER),
+                                "Upload Completed - Online Fruit Store",
+                                "All fruits are uploaded to our website successfully. A detailed list is attached to this email.",
+                                attachment)
   email.send_email(message)
   

@@ -7,7 +7,7 @@ import sys
 
 def load_json_from_file(path,file):
   """ Read lines of one file and crate a json """
-  json_model={"title":0, "name":1, "date":2, "feedback":3}
+  json_model={"name": 0, "weight": 1, "description":2}
   Json ={}
   with open(os.path.join(path,file)) as f:
     Json_txt=f.readlines()

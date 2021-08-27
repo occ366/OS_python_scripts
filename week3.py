@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-
-import json
 import locale
+import json
 import sys
 import operator
 import os
-from reports import generate as report
-from emails import generate as email_generate
-from emails import send as email_send
+import reports
+import emails
+
 
 def load_data(filename):
   """Loads the contents of filename as a JSON file."""
@@ -24,10 +23,8 @@ def format_car(car):
 
 def process_data(data):
   """Analyzes the data, looking for maximums.
-
   Returns a list of lines that summarize the information.
   """
-
   max_revenue = {"revenue": 0}
   sales = {"total_sales": 0}
   sales_by_year = {}
@@ -47,7 +44,7 @@ def process_data(data):
      sales_by_year[item["car"]["car_year"]] += item["total_sales"]
    else:
      sales_by_year[item["car"]["car_year"]] = item["total_sales"]
-    
+
 
    all_sales_by_year = sales_by_year.values()
    best_sale_of_year = max(all_sales_by_year)
@@ -73,21 +70,21 @@ def cars_dict_to_table(car_data):
 
 def main(argv):
   """Process the JSON data and generate a full report out of it."""
-  data = load_data("../car_sales.json")
+  data = load_data("./car_sales.json")
   summary = process_data(data)
   print(summary)
   path_report="/tmp/car.pdf"
   new_summary = '<br/>'.join(summary)
   head="Sales summary for last month"
   # TODO: turn this into a PDF report
-  report(path_report, head, new_summary,cars_dict_to_table(data))
+  reports.generate(path_report, head, new_summary,cars_dict_to_table(data))
   # TODO: send the PDF report as an email attachment
   sender = "automation@example.com"
   receiver = "{}@example.com".format(os.environ.get('USER'))
   subject = head
   body = '\n'.join(summary)
-  message = email_generate(sender, receiver, subject, body, path_report)
-  email_send(message)
+  message = emails.generate(sender, receiver, subject, body, path_report)
+  emails.send(message)
 
 if __name__ == "__main__":
   main(sys.argv)

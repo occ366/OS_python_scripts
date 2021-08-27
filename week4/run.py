@@ -22,8 +22,7 @@ def api_call(url,Json):
   """ Call the api of one server by url and upload the info of one json """
   headers = {'Content-type': 'application/json'}
   try:
-    payload={'json_payload': Json}
-    set=requests.post(url,data=Json),headers=headers)
+    set=requests.post(url,data=Json,headers=headers)
     if set.status_code is "201":
       print(set.status_code)
     else:

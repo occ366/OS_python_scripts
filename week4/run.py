@@ -37,6 +37,7 @@ if __name__ == "__main__":
   url="http://{}/fruits/?format=api"´.format(ipadd)
   for file in os.listdir(path):
     json=load_json_from_file(path,file)
+    json[weight]=int(re.search(r'([\d]*)',json[weight])[0])
     json['image_name']=re.sub['.txt', '.jpeg',file]
     api_call(url,json)
 

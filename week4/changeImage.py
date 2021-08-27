@@ -18,7 +18,8 @@ def convert_tiff_jpeg(dpath,opath):
 if __name__ == "__main__":
   USER = os.getenv('USER')
   path = '/home/{}/supplier-data/images/'.format(USER)
-  convert_tiff_jpeg(path,path):
+  patttern=r'[\w]*.tiff'
+  convert_tiff_jpeg(path,path,pattern)
       
   
-main()
+

@@ -73,7 +73,7 @@ def main(argv):
   data = load_data("./car_sales.json")
   summary = process_data(data)
   print(summary)
-  path_report="/tmp/car.pdf"
+  path_report="/tmp/cars.pdf"
   new_summary = '<br/>'.join(summary)
   head="Sales summary for last month"
   # TODO: turn this into a PDF report

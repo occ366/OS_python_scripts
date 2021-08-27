@@ -76,12 +76,13 @@ def main(argv):
   summary = process_data(data)
   print(summary)
   new_summary = '<br/>'.join(summary)
+  head="Sales summary for last month"
   # TODO: turn this into a PDF report
-  report("/tmp/car.pdf", "Sales summary for last month", new_summary,cars_dict_to_table(data))
+  report("/tmp/car.pdf", head, new_summary,cars_dict_to_table(data))
   # TODO: send the PDF report as an email attachment
   sender = "automation@example.com"
   receiver = "{}@example.com".format(os.environ.get('USER'))
-  subject = "Sales summary for last month"
+  subject = head
   body = '\n'.join(summary)
   message = email_generate(sender, receiver, subject, body, "/tmp/car.pdf")
   email_send(message)

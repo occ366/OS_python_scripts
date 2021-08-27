@@ -4,6 +4,10 @@ import json
 import locale
 import sys
 import operator
+import os
+from reports import generate as report
+from emails import generate as email_generate
+from emails import send as email_send
 
 def load_data(filename):
   """Loads the contents of filename as a JSON file."""
@@ -23,6 +27,7 @@ def process_data(data):
 
   Returns a list of lines that summarize the information.
   """
+
   max_revenue = {"revenue": 0}
   sales = {"total_sales": 0}
   best_car = {}
@@ -34,25 +39,25 @@ def process_data(data):
    if item_revenue > max_revenue["revenue"]:
      item["revenue"] = item_revenue
      max_revenue = item
-     # TODO: also handle max sales
-     if item["total_sales"] > sales["total_sales"]:
-       sales = item
-     # TODO: also handle most popular car_year
-     if not item["car"]["car_year"] in best_car.keys():
-       best_car[item["car"]["car_year"]] = item["total_sales"]
-     else:
-       best_car[item["car"]["car_year"]] += item["total_sales"]
+   # TODO: also handle max sales
+   if item["total_sales"] > sales["total_sales"]:
+    sales = item
+   # TODO: also handle most popular car_year
+   if not item["car"]["car_year"] in best_car.keys():
+     best_car[item["car"]["car_year"]] = item["total_sales"]
+   else:
+     best_car[item["car"]["car_year"]] += item["total_sales"]
 
-     all_values = best_car.values()
-     max_value = max(all_values)
-     max_key = max(best_car, key=best_car.get)
+   all_values = best_car.values()
+   max_value = max(all_values)
+   max_key = max(best_car, key=best_car.get)
 
   summary = [
         "The {} generated the most revenue: ${}".format(
             format_car(max_revenue["car"]), max_revenue["revenue"]),
-        "The {} had the most sales: {}".format(sales["car"]["car_model"], sales["total_sales"]),
+        "The {} had the most sales: {}".format(format_car(sales["car"]), sales["total_sales"]),
         "The most popular year was {} with {} sales.".format(max_key, max_value),
-  ]
+    ]
 
   return summary
 
@@ -67,19 +72,19 @@ def cars_dict_to_table(car_data):
 
 def main(argv):
   """Process the JSON data and generate a full report out of it."""
-  data = load_data("car_sales.json")
+  data = load_data("../car_sales.json")
   summary = process_data(data)
   print(summary)
+  new_summary = '<br/>'.join(summary)
   # TODO: turn this into a PDF report
-  reports.generate("/tmp/car.pdf", "Sales Summary for last month", summary[0]+"<\br>"+summary[1]+"<\br>"+summary[2]+"<\br>",cars_dict_to_table(data))
-
+  report("/tmp/car.pdf", "Sales Summary for last month", new_summary,cars_dict_to_table(data))
   # TODO: send the PDF report as an email attachment
   sender = "automation@example.com"
   receiver = "{}@example.com".format(os.environ.get('USER'))
   subject = "Sales summary for last month"
-  body = summary[0]+"\n"+summary[1]+"\n"+summary[2]+"\n"
-  message = emails.generate(sender, receiver, subject, body, "/tmp/car.pdf")
-  emails.send(message)
+  body = new_summary
+  message = email_generate(sender, receiver, subject, body, "/tmp/car.pdf")
+  email_send(message)
 
 if __name__ == "__main__":
   main(sys.argv)

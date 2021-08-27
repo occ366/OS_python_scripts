@@ -5,7 +5,7 @@ from PIL import Image
 
 
 def convert_tiff_jpeg(dpath,opath):
-  """convert tiff image to jpge""""
+  """convert tiff image to jpge"""
   files = os.listdir(opath)
   for img in files:
    if re.search(pattern,img):

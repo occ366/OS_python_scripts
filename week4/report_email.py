@@ -20,7 +20,6 @@ if __name__ == "__main__":
   path = '/home/{}/supplier-data/descriptions/'.format(USER)
   attachment ='/tmp/processed.pdf'
   title = 'Process update on'+ str(datetime.date.today().strftime("%B %d, %Y"))
-  print(paragraph(path))
   reports.generate_report(attachment, title, paragraph(path))
   message=emails.generate_email("automation@example.com",
                                 "{}@example.com".format(USER),

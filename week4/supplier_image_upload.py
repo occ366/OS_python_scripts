@@ -14,7 +14,7 @@ def upload_images(path,url):
           if u_imag.status_code is "201":
             print(u_imag.status_code)
           else:
-            set.raise_for_status()
+            u_imag.raise_for_status()
         except:
           print("Unexpected error"+str(u_imag))
 

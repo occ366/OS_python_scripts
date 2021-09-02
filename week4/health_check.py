@@ -1,11 +1,47 @@
 #!/usr/bin/env python3
 
+import email.message
+import mimetypes
+import os.path
+import smtplib
+
+def email_generate(sender, recipient, subject, body, attachment_path = ""):
+  """Generate email, default is with no attachment"""
+  # Basic Email formatting
+  message = email.message.EmailMessage()
+  message['Subject'] = subject
+  message['From'] = sender
+  message['To'] = recipient
+  message.set_content(body)
+
+  if attachment_path != "":
+    attachment_name = os.path.basename(attachment_path)
+    mime_type, _ = mimetypes.guess_type(attachment_path)
+    mime_type, mime_subtype = mime_type.split("/", 1)
+    with open(attachment_path, 'rb') as fp:
+      message.add_attachment(fp.read(),
+                            maintype=mime_type,
+                            subtype=mime_subtype,
+                            filename=attachment_name)
+  return message
+
+def email_send(package):
+  """Sends the email package to the configured SMTP server."""
+  mail_server = smtplib.SMTP('localhost')
+  mail_server.send_message(package)
+  mail_server.quit()
+student-00-80df72c7b64d@linux-instance:~$ ^C
+student-00-80df72c7b64d@linux-instance:~$ ./health_check.py ^C
+You have mail in /var/mail/student-00-80df72c7b64d
+student-00-80df72c7b64d@linux-instance:~$ cat health_check.py
+#!/usr/bin/env python3
+
 import shutil
 import psutil
 import socket
 import os
-from report_email import generate as email_generate
-from report_email import send as email_send
+import emails
+
 
 
 def check_cpu_usage(cpu):
@@ -66,6 +102,7 @@ if __name__ == "__main__":
         # body line give in assignment for email
         new_body = 'Please check your system and resolve the issue as soon as possible.'
         # structuring email and attaching the file. Then sending the email, using the custom module.
-        msg = email_generate("automation@example.com", "{}@example.com".format(USER),
+        msg = emails.email_generate("automation@example.com", "{}@example.com".format(USER),
                              new_subject, new_body, "")
-        email_send(msg)
+        emails.email_send(msg)
+

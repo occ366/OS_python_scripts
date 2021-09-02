@@ -5,7 +5,7 @@ import mimetypes
 import os.path
 import smtplib
 
-def generate_email(sender, recipient, subject, body, attachment_path = None):
+def email_generate(sender, recipient, subject, body, attachment_path = ""):
   """Generate email, default is with no attachment"""
   # Basic Email formatting
   message = email.message.EmailMessage()
@@ -14,7 +14,7 @@ def generate_email(sender, recipient, subject, body, attachment_path = None):
   message['To'] = recipient
   message.set_content(body)
 
-  if attachment_path != None:
+  if attachment_path != "":
     attachment_name = os.path.basename(attachment_path)
     mime_type, _ = mimetypes.guess_type(attachment_path)
     mime_type, mime_subtype = mime_type.split("/", 1)
@@ -25,7 +25,7 @@ def generate_email(sender, recipient, subject, body, attachment_path = None):
                             filename=attachment_name)
   return message
 
-def send_email(package):
+def email_send(package):
   """Sends the email package to the configured SMTP server."""
   mail_server = smtplib.SMTP('localhost')
   mail_server.send_message(package)
